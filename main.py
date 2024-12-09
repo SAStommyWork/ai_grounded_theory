@@ -3,7 +3,7 @@ import gradio as gr
 from openai import OpenAI
 import subprocess
 import os
-import logging
+#import logging
 
 #logging.basicConfig(level=logging.DEBUG)
 
@@ -20,8 +20,8 @@ def linkopenai(apikey):
         print(e)
         return None  
     
-grounded_theory_tree_path = "./static/grounded_theory_tree.png"
-grounded_theory_tree_source = "./static/grounded_theory_tree"
+grounded_theory_tree_path = "./drawgraph/grounded_theory_tree.png"
+grounded_theory_tree_source = "./drawgraph/grounded_theory_tree"
 
 
 def generategraph(code_string):
@@ -31,11 +31,11 @@ def generategraph(code_string):
         os.remove(grounded_theory_tree_source)
         
     # 将代码写入文件
-    with open("functiongraph.py", "w", encoding="utf-8") as f:
+    with open("./drawgraph/functiongraph.py", "w", encoding="utf-8") as f:
         f.write(code_string)
     
     # 执行 Python 文件并捕获输出
-    subprocess.run(["python", "functiongraph.py"], capture_output=True, text=True)
+    subprocess.run(["python", "./drawgraph/functiongraph.py"], capture_output=True, text=True)
     #logging.error("生成圖像的輸出：", result.stdout)
     #logging.error("生成圖像的錯誤：", result.stderr)
     
