@@ -32,10 +32,13 @@ def generategraph(code_string):
         f.write(code_string)
     
     # 执行 Python 文件并捕获输出
-    subprocess.run(["python", "functiongraph.py"], capture_output=True, text=True)
+    result = subprocess.run(["python", "functiongraph.py"], capture_output=True, text=True)
+    print("生成圖像的輸出：", result.stdout)
+    print("生成圖像的錯誤：", result.stderr)
     
+    print(f"檢查圖片是否存在：{grounded_theory_tree_path}")
     if not os.path.exists("grounded_theory_tree.png"):
-        raise FileNotFoundError("grounded_theory_tree.png 文件未生成，check your code。")
+        raise FileNotFoundError(f"{grounded_theory_tree_path}文件未生成，check your code。")
 
 # 读取 docx 文件的函数
 def load_docx_data(files):
