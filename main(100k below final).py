@@ -13,12 +13,15 @@ def linkopenai(apikey):
     except Exception as e:
         print(e)
         return None  
+    
+grounded_theory_tree_path = "/tmp/grounded_theory_tree.png"
+grounded_theory_tree_source = "/tmp/grounded_theory_tree"
 
 def generategraph(code_string):
-    if os.path.exists("grounded_theory_tree"):
-        os.remove("grounded_theory_tree")
-    if os.path.exists("grounded_theory_tree.png"):
-        os.remove("grounded_theory_tree.png")
+    if os.path.exists(grounded_theory_tree_path):
+        os.remove(grounded_theory_tree_path)
+    if os.path.exists(grounded_theory_tree_source):
+        os.remove(grounded_theory_tree_source)
         
     # 将代码写入文件
     with open("functiongraph.py", "w", encoding="utf-8") as f:
@@ -137,7 +140,7 @@ def main(apikey, files, level_num, node_num_1, node_num_2, node_num_3):
         content = load_docx_data(files)
         analysis_result = grounded_theory_analysis(client, content)
         generategraph(getgraphcode(client, analysis_result, level_num, node_num_1, node_num_2, node_num_3))
-        return analysis_result, "grounded_theory_tree.png"
+        return analysis_result, grounded_theory_tree_path
 
 # 更新输入状态
 def update_dynamic_inputs(level_num):
