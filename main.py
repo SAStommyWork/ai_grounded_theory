@@ -4,6 +4,9 @@ from openai import OpenAI
 import subprocess
 import os
 
+if not os.path.exists("./static"):
+    os.makedirs("./static")
+
 def linkopenai(apikey):
     try:
         client = OpenAI(
@@ -14,8 +17,9 @@ def linkopenai(apikey):
         print(e)
         return None  
     
-grounded_theory_tree_path = "/tmp/grounded_theory_tree.png"
-grounded_theory_tree_source = "/tmp/grounded_theory_tree"
+grounded_theory_tree_path = "./static/grounded_theory_tree.png"
+grounded_theory_tree_source = "./static/grounded_theory_tree"
+
 
 def generategraph(code_string):
     if os.path.exists(grounded_theory_tree_path):
@@ -30,8 +34,8 @@ def generategraph(code_string):
     # 执行 Python 文件并捕获输出
     subprocess.run(["python", "functiongraph.py"], capture_output=True, text=True)
     
-    #if not os.path.exists("grounded_theory_tree.png"):
-    #    raise FileNotFoundError("grounded_theory_tree.png 文件未生成，请检查代码生成过程是否正确。")
+    if not os.path.exists("grounded_theory_tree.png"):
+        raise FileNotFoundError("grounded_theory_tree.png 文件未生成，check your code。")
 
 # 读取 docx 文件的函数
 def load_docx_data(files):
