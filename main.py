@@ -189,4 +189,4 @@ with gr.Blocks() as iface:
         outputs=[node_num_2, node_num_3]
     )
 
-iface.launch(share=True)
+iface.launch(server_name="0.0.0.0", server_port=int(os.environ.get("PORT", 7860)))
