@@ -18,18 +18,26 @@ def linkopenai(apikey):
         return None  
     
 grounded_theory_tree_path = "./tmp/grounded_theory_tree"
+function_graph_path = "/tmp/functiongraph.py"
 
 def generategraph(code_string):
     if os.path.exists(f"{grounded_theory_tree_path}.png"):
         os.remove(f"{grounded_theory_tree_path}.png")
+    
+    # 在 /tmp/ 目錄中創建 functiongraph.py 文件
+    with open(function_graph_path, "w", encoding="utf-8") as f:
+        f.write(code_string)
+    
+    # 執行 /tmp/functiongraph.py，捕獲執行結果
+    subprocess.run(["python", function_graph_path], capture_output=True, text=True)
         
     # 将代码写入文件
     #with open("./drawgraph/functiongraph.py", "w", encoding="utf-8") as f:
     #    f.write(code_string)
     
     # 执行 Python 文件并捕获输出
-    #subprocess.run(["python", "./drawgraph/functiongraph.py"], capture_output=True, text=True)
-    subprocess.run(["python", "-c", code_string], capture_output=True, text=True)
+    #subprocess.run(["python", "functiongraph.py"], capture_output=True, text=True)
+    #subprocess.run(["python", "-c", code_string], capture_output=True, text=True)
     #logging.error("生成圖像的輸出：", result.stdout)
     #logging.error("生成圖像的錯誤：", result.stderr)
     
