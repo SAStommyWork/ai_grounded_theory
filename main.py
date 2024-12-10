@@ -4,6 +4,7 @@ from openai import OpenAI
 import subprocess
 import os
 import logging
+from graphviz import Digraph
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -109,8 +110,7 @@ def getgraphcode(client, result, level_num, node_num_1, node_num_2, node_num_3):
     code_response = client.chat.completions.create(
         model="gpt-4o",
         messages=[{"role": "user", "content": f"""根據以下資料:\n{result}\n生成用畫出紮根理論{level_num}層樹狀圖, 第一層的節點數為一定在{node_num_1}以內, 第二層的節點數一定在{node_num_2}以內, 第三層的節點數一定在{node_num_3}以內及圖片以grounded_theory_tree.png儲存的python程式碼, 
-                   內容用英文寫, 其中程式碼依照情況必定包括以下13行:\n
-                   dot = Digraph('G', format='png', directory='/tmp')\n
+                   內容用英文寫, 其中程式碼依照情況必定包括以下12行:\n
                    dot.attr("graph", fontname='Times New Roman', fontweight="bold")\n
                    dot.attr("node", fontname='Times New Roman', fontweight="bold")\n
                    dot.attr("edge", fontname='Times New Roman', fontweight="bold")\n
