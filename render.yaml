@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: grounded-theory
+    env: python
+    plan: free
+    branch: main
+    buildCommand: "docker build -t grounded-theory ."
+    startCommand: "docker run -p 0.0.0.0:10000:7860 grounded-theory"

@@ -1,0 +1,27 @@
+# 基礎映像
+FROM python:3.9-slim
+
+# 安裝所需的系統工具和依賴項 (包含 graphviz)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    graphviz \
+    gcc \
+    g++ \
+    curl \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# 設置工作目錄
+WORKDIR /app
+
+# 複製所有檔案到容器中
+COPY . .
+
+# 安裝 Python 依賴項
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 暴露端口（Gradio 默認為 7860）
+EXPOSE 7860
+
+# 啟動應用
+CMD ["python", "app.py"]
