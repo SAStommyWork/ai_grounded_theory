@@ -17,12 +17,13 @@ def linkopenai(apikey):
         print(e)
         return None  
     
-grounded_theory_tree_path = "./static/grounded_theory_tree"
+#grounded_theory_tree_path = "./tmp/grounded_theory_tree"
+grounded_theory_tree_path = "./public/grounded_theory_tree"
 #function_graph_path = "/tmp/functiongraph.py"
 
 def generategraph(code_string):
-    if not os.path.exists("./static"):
-        os.makedirs("./static")
+    if not os.path.exists("./public"):
+        os.makedirs("./public")
     if os.path.exists(f"{grounded_theory_tree_path}.png"):
         os.remove(f"{grounded_theory_tree_path}.png")
     
