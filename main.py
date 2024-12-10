@@ -7,9 +7,6 @@ import os
 
 #logging.basicConfig(level=logging.DEBUG)
 
-if not os.path.exists("./static"):
-    os.makedirs("./static")
-
 def linkopenai(apikey):
     try:
         client = OpenAI(
@@ -20,22 +17,19 @@ def linkopenai(apikey):
         print(e)
         return None  
     
-grounded_theory_tree_path = "./drawgraph/grounded_theory_tree.png"
-grounded_theory_tree_source = "./drawgraph/grounded_theory_tree"
-
+grounded_theory_tree_path = "./tmp/grounded_theory_tree"
 
 def generategraph(code_string):
-    if os.path.exists(grounded_theory_tree_path):
-        os.remove(grounded_theory_tree_path)
-    if os.path.exists(grounded_theory_tree_source):
-        os.remove(grounded_theory_tree_source)
+    if os.path.exists(f"{grounded_theory_tree_path}.png"):
+        os.remove(f"{grounded_theory_tree_path}.png")
         
     # 将代码写入文件
-    with open("./drawgraph/functiongraph.py", "w", encoding="utf-8") as f:
-        f.write(code_string)
+    #with open("./drawgraph/functiongraph.py", "w", encoding="utf-8") as f:
+    #    f.write(code_string)
     
     # 执行 Python 文件并捕获输出
-    subprocess.run(["python", "./drawgraph/functiongraph.py"], capture_output=True, text=True)
+    #subprocess.run(["python", "./drawgraph/functiongraph.py"], capture_output=True, text=True)
+    subprocess.run(["python", "-c", code_string], capture_output=True, text=True)
     #logging.error("生成圖像的輸出：", result.stdout)
     #logging.error("生成圖像的錯誤：", result.stderr)
     
@@ -124,7 +118,7 @@ def getgraphcode(client, result, level_num, node_num_1, node_num_2, node_num_3):
                         dot.edge("AxialCodingLabel", node_id, style="dashed")\n
                    for node_id in selective_coding_nodes:\n
                         dot.edge("SelectiveCodingLabel", node_id, style="dashed")\n
-                   dot.render(filename='grounded_theory_tree', format='png')\n
+                   dot.render(filename=grounded_theory_tree_path, format='png')\n
                    只需要回傳python程式碼, 不需要任何描述"""}]
     )
     code_string = code_response.choices[0].message.content
@@ -150,7 +144,7 @@ def main(apikey, files, level_num, node_num_1, node_num_2, node_num_3):
         content = load_docx_data(files)
         analysis_result = grounded_theory_analysis(client, content)
         generategraph(getgraphcode(client, analysis_result, level_num, node_num_1, node_num_2, node_num_3))
-        return analysis_result, grounded_theory_tree_path
+        return analysis_result, f"{grounded_theory_tree_path}.png"
 
 # 更新输入状态
 def update_dynamic_inputs(level_num):
