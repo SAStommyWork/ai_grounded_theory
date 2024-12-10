@@ -22,6 +22,7 @@ grounded_theory_tree_path = "./tmp/grounded_theory_tree"
 #function_graph_path = "/tmp/functiongraph.py"
 
 def generategraph(code_string):
+    logging.getLogger(code_string)
     if not os.path.exists("./public"):
         os.makedirs("./public")
     if os.path.exists(f"{grounded_theory_tree_path}.png"):
@@ -37,8 +38,8 @@ def generategraph(code_string):
     # 执行 Python 文件并捕获输出
     #subprocess.run(["python", "functiongraph.py"], capture_output=True, text=True)
     result = subprocess.run(["python", "-c", code_string], capture_output=True, text=True)
-    logging.error("生成圖像的輸出：", result.stdout)
-    logging.error("生成圖像的錯誤：", result.stderr)
+    logging.error("生成圖像的輸出："+ result.stdout)
+    logging.error("生成圖像的錯誤："+ result.stderr)
     
     logging.error(f"檢查圖片是否存在：{grounded_theory_tree_path}")
     #if not os.path.exists("grounded_theory_tree.png"):
