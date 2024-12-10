@@ -4,7 +4,7 @@ from openai import OpenAI
 import subprocess
 import os
 import logging
-#from graphviz import Digraph
+
 logging.basicConfig(level=logging.DEBUG)
 
 def linkopenai(apikey):
@@ -26,20 +26,6 @@ def generategraph(code_string):
         os.makedirs("./public")
     if os.path.exists(f"{grounded_theory_tree_path}.png"):
         os.remove(f"{grounded_theory_tree_path}.png")
-    if not os.path.exists('/tmp/graphviz/bin/dot'):
-        os.makedirs('/tmp/graphviz/bin', exist_ok=True)
-        subprocess.run([
-            'wget', 
-            '-O', '/tmp/graphviz.zip', 
-            'https://graphviz.gitlab.io/pub/graphviz/stable/portable/graphviz-2.38.zip'
-        ])
-        subprocess.run(['unzip', '/tmp/graphviz.zip', '-d', '/tmp/graphviz'], check=True)
-
-    # 手動將可執行文件路徑加入 PATH
-    os.environ["PATH"] += os.pathsep + '/tmp/graphviz/bin'
-    env = os.environ.copy()
-    env["PATH"] += os.pathsep + '/tmp/graphviz/bin'
-    subprocess.run(['dot', '-V'], env=env, check=True)
     
     # 在 /tmp/ 目錄中創建 functiongraph.py 文件
     #with open(function_graph_path, "w", encoding="utf-8") as f:
@@ -50,8 +36,7 @@ def generategraph(code_string):
     
     # 执行 Python 文件并捕获输出
     #subprocess.run(["python", "functiongraph.py"], capture_output=True, text=True)
-    result = subprocess.run(["python", "-c", code_string], capture_output=True, text=True, check=True)
-    print(code_string)
+    result = subprocess.run(["python", "-c", code_string], capture_output=True, text=True)
     logging.error("生成圖像的輸出：", result.stdout)
     logging.error("生成圖像的錯誤：", result.stderr)
     
@@ -124,8 +109,7 @@ def getgraphcode(client, result, level_num, node_num_1, node_num_2, node_num_3):
     code_response = client.chat.completions.create(
         model="gpt-4o",
         messages=[{"role": "user", "content": f"""根據以下資料:\n{result}\n生成用畫出紮根理論{level_num}層樹狀圖, 第一層的節點數為一定在{node_num_1}以內, 第二層的節點數一定在{node_num_2}以內, 第三層的節點數一定在{node_num_3}以內及圖片以grounded_theory_tree.png儲存的python程式碼, 
-                   內容用英文寫, 其中程式碼依照情況必定包括以下13行:\n
-                   dot = Digraph('G', format='png', directory='/tmp')\n
+                   內容用英文寫, 其中程式碼依照情況必定包括以下12行:\n
                    dot.attr("graph", fontname='Times New Roman', fontweight="bold")\n
                    dot.attr("node", fontname='Times New Roman', fontweight="bold")\n
                    dot.attr("edge", fontname='Times New Roman', fontweight="bold")\n
