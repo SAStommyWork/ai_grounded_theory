@@ -4,6 +4,7 @@ from openai import OpenAI
 import subprocess
 import os
 import logging
+import tempfile
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -23,6 +24,11 @@ def generategraph(code_string):
     logging.getLogger(code_string)
     if os.path.exists(f"{grounded_theory_tree_path}.png"):
         os.remove(f"{grounded_theory_tree_path}.png")
+        
+    # 建立臨時文件，並寫入多行的 Python 代碼
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".py") as temp_script:
+        temp_script.write(code_string.encode('utf-8'))
+        temp_script_path = temp_script.name
     
     # 在 /tmp/ 目錄中創建 functiongraph.py 文件
     #with open(function_graph_path, "w", encoding="utf-8") as f:
@@ -32,8 +38,8 @@ def generategraph(code_string):
     #result = subprocess.run(["python", function_graph_path], capture_output=True, text=True)
     
     # 执行 Python 文件并捕获输出
-    #subprocess.run(["python", "functiongraph.py"], capture_output=True, text=True)
-    result = subprocess.run(["python", "-c", code_string], capture_output=True, text=True)
+    result = subprocess.run(["python", temp_script_path], capture_output=True, text=True)
+    #result = subprocess.run(["python", "-c", code_string], capture_output=True, text=True)
     logging.error("生成圖像的輸出："+ result.stdout)
     logging.error("生成圖像的錯誤："+ result.stderr)
     
