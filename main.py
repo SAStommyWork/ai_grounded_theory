@@ -17,8 +17,8 @@ def linkopenai(apikey):
         print(e)
         return None  
     
-#grounded_theory_tree_path = "./tmp/grounded_theory_tree"
-grounded_theory_tree_path = "./public/grounded_theory_tree"
+grounded_theory_tree_path = "./tmp/grounded_theory_tree"
+#grounded_theory_tree_path = "./public/grounded_theory_tree"
 #function_graph_path = "/tmp/functiongraph.py"
 
 def generategraph(code_string):
