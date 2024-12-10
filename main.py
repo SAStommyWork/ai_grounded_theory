@@ -59,7 +59,7 @@ lang = "且所有回應用使用英文回答"
 # AI 进行扎根理论三层编码的函数
 def grounded_theory_analysis(client, content):
     global open_coding, axial_coding, selective_coding
-    dialog_history = [{"role": "system", "content": f"你是紮根理論的研究專家, 你也能夠截取資料文本原文(句子不會進行任何修改, 句子會與資料文本完全相同)作為根據{lang}"}]
+    dialog_history = [{"role": "system", "content": f"你是紮根理論的研究專家, 你也能夠截取資料文本原文(句子不會進行任何修改, 句子會與資料文本完全相同)作為根據{lang},你亦是一個python工程師,你不會寫出有錯誤的代碼"}]
     
     open_prompt = f"请對前面由{len(content)}段组成的文本進行開放式編碼，并列出主要概念後面用()加上對應資料作為根據"
     for i, part in enumerate(content):
