@@ -5,7 +5,7 @@ import subprocess
 import os
 import logging
 
-#logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
 
 def linkopenai(apikey):
     try:
@@ -37,7 +37,7 @@ def generategraph(code_string):
     logging.error("生成圖像的輸出：", result.stdout)
     logging.error("生成圖像的錯誤：", result.stderr)
     
-    #logging.error(f"檢查圖片是否存在：{grounded_theory_tree_path}")
+    logging.error(f"檢查圖片是否存在：{grounded_theory_tree_path}")
     #if not os.path.exists("grounded_theory_tree.png"):
         #raise FileNotFoundError(f"{grounded_theory_tree_path}文件未生成，check your code。")
 
