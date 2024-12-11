@@ -112,16 +112,37 @@ def getgraphcode(client, result, level_num, node_num_1, node_num_2, node_num_3):
     code_response = client.chat.completions.create(
         model="gpt-4o",
         messages=[{"role": "user", "content": f"""根據以下資料:\n{result}\n生成用畫出紮根理論{level_num}層樹狀圖, 第一層的節點數為一定在{node_num_1}以內, 第二層的節點數一定在{node_num_2}以內, 第三層的節點數一定在{node_num_3}以內及圖片以grounded_theory_tree.png儲存的python程式碼, 
-                   內容用英文寫, 其中程式碼依照情況必定包括以下13行:\n
+                   內容用英文寫, 每一個node的要以對應code顯示\n
+                   以下為3層樹狀圖程式碼參考樣式\n
+                   from graphviz import Digraph\n
                    dot = Digraph(comment='Grounded Theory Tree')\n
                    dot.attr("graph", fontname='Times New Roman', fontweight="bold")\n
                    dot.attr("node", fontname='Times New Roman', fontweight="bold")\n
                    dot.attr("edge", fontname='Times New Roman', fontweight="bold")\n
-                   # 添加层名标记节点(以下為3層樹狀圖使用樣式)\n
                    dot.node("OpenCodingLabel", "Open coding", shape="plaintext", fontname='Times New Roman', fontweight="bold")\n
                    dot.node("AxialCodingLabel", "Axial coding", shape="plaintext", fontname='Times New Roman', fontweight="bold")\n
                    dot.node("SelectiveCodingLabel", "Selective coding", shape="plaintext", fontname='Times New Roman', fontweight="bold")\n
-                   注: 2層樹狀圖樣式與3層不同(只有3層中的其中2行)且名字根據關係自行命名而不是"Open coding", "Axial coding", "Selective coding"\n
+                   # 第一层 (Open Coding)
+                   open_coding_nodes = ["Atrocities", "Economic Turmoil", "Resource Dependence"]\n
+                   dot.node("Atrocities", "Atrocities Against Civilians")\n
+                   dot.node("EconomicTurmoil", "Economic Turmoil")\n
+                   dot.node("ResourceDependence", "Dependence on Russian Resources")\n
+                   # 第二层 (Axial Coding)\n
+                   axial_coding_nodes = ["HumanitarianCrisis", "EconomicRepercussions", "GeopoliticalDynamics"]\n
+                   dot.node("HumanitarianCrisis", "Humanitarian Crisis")\n
+                   dot.node("EconomicRepercussions", "Economic Repercussions")\n
+                   dot.node("GeopoliticalDynamics", "Geopolitical Dynamics")\n
+                   # 第三层 (Selective Coding)\n
+                   selective_coding_nodes = ["ConflictDynamics"]\n
+                   dot.node("ConflictDynamics", "Conflict Dynamics")\n
+                   # 连接Open Coding到Axial Coding\n
+                   dot.edge("Atrocities", "HumanitarianCrisis")\n
+                   dot.edge("EconomicTurmoil", "EconomicRepercussions")\n
+                   dot.edge("ResourceDependence", "GeopoliticalDynamics")\n
+                   # 连接Axial Coding到Selective Coding\n
+                   dot.edge("HumanitarianCrisis", "ConflictDynamics")\n
+                   dot.edge("EconomicRepercussions", "ConflictDynamics")\n
+                   dot.edge("GeopoliticalDynamics", "ConflictDynamics")\n
                    # 连接层名标记到每一层的所有节点(按層數加入)\n
                    for node_id in open_coding_nodes:\n
                         dot.edge("OpenCodingLabel", node_id, style="dashed")\n
@@ -130,6 +151,7 @@ def getgraphcode(client, result, level_num, node_num_1, node_num_2, node_num_3):
                    for node_id in selective_coding_nodes:\n
                         dot.edge("SelectiveCodingLabel", node_id, style="dashed")\n
                    dot.render(filename=grounded_theory_tree_path, format='png')\n
+                   注: 2層樹狀圖樣式與3層不同(只有3層中的其中2行)且名字根據關係自行命名而不是"Open coding", "Axial coding", "Selective coding"\n
                    只需要回傳python程式碼, 不需要任何描述"""}]
     )
     code_string = code_response.choices[0].message.content
