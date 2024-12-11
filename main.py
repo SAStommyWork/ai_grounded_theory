@@ -38,12 +38,12 @@ def generategraph(code_string):
     #result = subprocess.run(["python", function_graph_path], capture_output=True, text=True)
     
     # 执行 Python 文件并捕获输出
-    result = subprocess.run(["python", temp_script_path], capture_output=True, text=True)
-    #result = subprocess.run(["python", "-c", code_string], capture_output=True, text=True)
-    logging.error("生成圖像的輸出："+ result.stdout)
-    logging.error("生成圖像的錯誤："+ result.stderr)
+    subprocess.run(["python", temp_script_path], capture_output=True, text=True)
+    #result = subprocess.run(["python", temp_script_path], capture_output=True, text=True)
+    #logging.error("生成圖像的輸出："+ result.stdout)
+    #logging.error("生成圖像的錯誤："+ result.stderr)
     
-    logging.error(f"檢查圖片是否存在：{grounded_theory_tree_path}")
+    #logging.error(f"檢查圖片是否存在：{grounded_theory_tree_path}")
     #if not os.path.exists("grounded_theory_tree.png"):
         #raise FileNotFoundError(f"{grounded_theory_tree_path}文件未生成，check your code。")
 
@@ -60,11 +60,11 @@ def load_docx_data(files):
 lang = "且所有回應用使用英文回答"
 
 # AI 进行扎根理论三层编码的函数
-def grounded_theory_analysis(client, content):
+def grounded_theory_analysis(client, content, node_num_1, node_num_2, node_num_3):
     global open_coding, axial_coding, selective_coding
     dialog_history = [{"role": "system", "content": f"你是紮根理論的研究專家, 你也能夠截取資料文本原文(句子不會進行任何修改, 句子會與資料文本完全相同)作為根據{lang},你亦是一個python工程師,你不會寫出有錯誤的代碼"}]
     
-    open_prompt = f"请對前面由{len(content)}段组成的文本進行開放式編碼，并列出主要概念後面用()加上對應資料作為根據"
+    open_prompt = f"请對前面由{len(content)}段组成的文本進行開放式編碼，并列出主要概念後面用()加上對應資料作為根據並產生最多{node_num_1}個點"
     for i, part in enumerate(content):
         if i == len(content) - 1:
             dialog_history.append({"role": "user", "content": open_prompt})
@@ -82,7 +82,7 @@ def grounded_theory_analysis(client, content):
     
     
     # 主轴编码
-    axial_prompt = f"根據已完成開放式編碼结果，進行主軸編碼，建立類别之間的聯繫並後面用()加上對應資料開放式編碼作為根據：\n\n{open_coding}"
+    axial_prompt = f"根據已完成開放式編碼结果，進行主軸編碼，建立類别之間的聯繫並後面用()加上對應資料開放式編碼作為根據並產生最多{node_num_2}個點：\n\n{open_coding}"
     dialog_history.append({"role": "user", "content": axial_prompt})
     axial_response = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -92,7 +92,7 @@ def grounded_theory_analysis(client, content):
     dialog_history.append({"role": "assistant", "content": axial_coding})
     
     # 选择性编码
-    selective_prompt = f"根據已完成主軸編碼结果，進行選擇性編碼，提煉核心類别并形成理論框架後面用()加上對應資料主軸編碼作為根據同時生成對應的theoretical framework及參考資料：\n\n{axial_coding}"
+    selective_prompt = f"根據已完成主軸編碼结果，進行選擇性編碼，提煉核心類别并形成理論框架後面用()加上對應資料主軸編碼作為根據同時生成對應的theoretical framework及參考資料並產生最多{node_num_3}個點：\n\n{axial_coding}"
     dialog_history.append({"role": "user", "content": selective_prompt})
     selective_response = client.chat.completions.create(
         model="gpt-4o-mini",
