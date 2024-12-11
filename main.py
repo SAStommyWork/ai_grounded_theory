@@ -36,8 +36,6 @@ def generategraph(code_string):
         logging.error("生成圖像的錯誤：" + result.stderr)
     except subprocess.CalledProcessError as e:
         logging.error("執行錯誤：" + e.stderr)
-    finally:
-        os.remove(temp_script_path)  # 確保刪除臨時文件
     
     # 在 /tmp/ 目錄中創建 functiongraph.py 文件
     #with open(function_graph_path, "w", encoding="utf-8") as f:
