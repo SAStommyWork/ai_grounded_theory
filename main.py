@@ -117,7 +117,7 @@ def getgraphcode(client, result, level_num, node_num_1, node_num_2, node_num_3):
         model="gpt-4o",
         messages=[{"role": "user", "content": f"""根據以下資料:\n{result}\n生成用畫出紮根理論{level_num}層樹狀圖, 第一層的節點數為一定在{node_num_1}以內, 第二層的節點數一定在{node_num_2}以內, 第三層的節點數一定在{node_num_3}以內及圖片以grounded_theory_tree.png儲存的python程式碼, 
                    內容用英文寫, 每一個node的要以對應code顯示\n
-                   3層樹狀圖: 第一層全部的node是open coding的點, 第二層全部的node是axial coding的點, 第三層全部的node是selective coding的點\n
+                   3層樹狀圖: 依照數字點列, 第一層全部的node是open coding的點, 第二層全部的node是axial coding的點, 第三層全部的node是selective coding的點\n
                    2層樹狀圖: 自行安排, 樣式與3層相似\n
                    以下為3層樹狀圖程式碼參考樣式\n
                    from graphviz import Digraph\n
