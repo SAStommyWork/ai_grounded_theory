@@ -29,6 +29,15 @@ def generategraph(code_string):
     with tempfile.NamedTemporaryFile(delete=False, suffix=".py") as temp_script:
         temp_script.write(code_string.encode('utf-8'))
         temp_script_path = temp_script.name
+        
+    try:
+        result = subprocess.run(["python", temp_script_path], capture_output=True, text=True)
+        logging.error("生成圖像的輸出：" + result.stdout)
+        logging.error("生成圖像的錯誤：" + result.stderr)
+    except subprocess.CalledProcessError as e:
+        logging.error("執行錯誤：" + e.stderr)
+    finally:
+        os.remove(temp_script_path)  # 確保刪除臨時文件
     
     # 在 /tmp/ 目錄中創建 functiongraph.py 文件
     #with open(function_graph_path, "w", encoding="utf-8") as f:
@@ -39,9 +48,6 @@ def generategraph(code_string):
     
     # 执行 Python 文件并捕获输出
     #subprocess.run(["python", temp_script_path], capture_output=True, text=True)
-    result = subprocess.run(["python", temp_script_path], capture_output=True, text=True)
-    logging.error("生成圖像的輸出："+ result.stdout)
-    logging.error("生成圖像的錯誤："+ result.stderr)
     
     logging.error(f"檢查圖片是否存在：{grounded_theory_tree_path}")
     #if not os.path.exists("grounded_theory_tree.png"):
