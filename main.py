@@ -176,7 +176,7 @@ def main(apikey, files, level_num, node_num_1, node_num_2, node_num_3):
         if client == "":
             return "<h1 style='color:red;'>wrong apikey, please check your openai key</h1>", None
         content = load_docx_data(files)
-        analysis_result = grounded_theory_analysis(client, content)
+        analysis_result = grounded_theory_analysis(client, content, node_num_1, node_num_2, node_num_3)
         generategraph(getgraphcode(client, analysis_result, level_num, node_num_1, node_num_2, node_num_3))
         return analysis_result, f"{grounded_theory_tree_path}.png"
 
