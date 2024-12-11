@@ -92,7 +92,7 @@ def grounded_theory_analysis(client, content):
     dialog_history.append({"role": "assistant", "content": axial_coding})
     
     # 选择性编码
-    selective_prompt = f"根據已完成主軸編碼结果，進行選擇性編碼，提煉核心類别并形成理論框架後面用()加上對應資料主軸編碼作為根據：\n\n{axial_coding}"
+    selective_prompt = f"根據已完成主軸編碼结果，進行選擇性編碼，提煉核心類别并形成理論框架後面用()加上對應資料主軸編碼作為根據同時生成對應的theoretical framework及參考資料：\n\n{axial_coding}"
     dialog_history.append({"role": "user", "content": selective_prompt})
     selective_response = client.chat.completions.create(
         model="gpt-4o-mini",
